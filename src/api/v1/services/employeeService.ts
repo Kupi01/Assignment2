@@ -1,5 +1,5 @@
-import { employees } from "src/data/employee";
-import { Employee } from "src/models/employee";
+import { employees } from "../../../data/employee";
+import { Employee } from "../../../models/employee";
 
 let nextId = employees.length ? Math.max(...employees.map(e => e.id)) + 1 : 1;
 

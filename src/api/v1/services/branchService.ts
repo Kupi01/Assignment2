@@ -1,5 +1,5 @@
-import { branches } from "src/data/branch";
-import { Branch } from "src/models/branch";
+import { branches } from "../../../data/branch";
+import { Branch } from "../../../models/branch";
 
 let nextId = branches.length ? Math.max(...branches.map(b => b.id)) + 1 : 1;
 

@@ -1,6 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import employeeRoutes from "src/api/v1/routes/employeeRoutes";
+import employeeRoutes from "./api/v1/routes/employeeRoutes";
 import branchRoutes from "./api/v1/routes/branchRoutes";
 
 const app = express();
