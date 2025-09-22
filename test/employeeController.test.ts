@@ -1,5 +1,5 @@
-import * as employeeController from "src/api/v1/controllers/employeeController";
-import * as employeeService from "src/api/v1/services/employeeService";
+import * as employeeController from "../src/api/v1/controllers/employeeController";
+//import * as employeeService from "../src/api/v1/services/employeeService";
 import { Request, Response } from "express";
 
 describe("Employee Controller Logical Operations", () => {

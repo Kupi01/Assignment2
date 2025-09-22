@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
 
-export function getAllEmployees(req: Request, res: Response) {
+export function getAllEmployees(_req: Request, res: Response) {
   res.json(employeeService.getAllEmployees());
 }
 
