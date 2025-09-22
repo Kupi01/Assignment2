@@ -35,3 +35,21 @@ export function deleteEmployee(req: Request, res: Response) {
   if (!deleted) return res.status(404).json({ error: "Employee not found" });
   res.json({ message: "Employee deleted" });
 }
+
+export function getEmployeesByBranch(req: Request, res: Response) {
+  const branchId = Number(req.params.branchId);
+  if (isNaN(branchId)) {
+    return res.status(400).json({ error: "Invalid branch ID" });
+  }
+  const employees = employeeService.getEmployeesByBranch(branchId);
+  res.json(employees);
+}
+
+export function getEmployeesByDepartment(req: Request, res: Response) {
+  const department = req.params.department;
+  if (!department) {
+    return res.status(400).json({ error: "Department parameter is required" });
+  }
+  const employees = employeeService.getEmployeesByDepartment(department);
+  res.json(employees);
+}
