@@ -1,5 +1,5 @@
 import express from "express";
-import * as branchController from "src/api/v1/controllers/branchController";
+import * as branchController from "../controllers/branchController";
 
 const router = express.Router();
 
