@@ -30,3 +30,11 @@ export function deleteEmployee(id: number): boolean {
   employees.splice(index, 1);
   return true;
 }
+
+export function getEmployeesByBranch(branchId: number) {
+  return employees.filter(e => e.branchId === branchId);
+}
+
+export function getEmployeesByDepartment(department: string) {
+  return employees.filter(e => e.department.toLowerCase() === department.toLowerCase());
+}
