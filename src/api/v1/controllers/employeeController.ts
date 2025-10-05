@@ -8,7 +8,7 @@ export function getAllEmployees(_req: Request, res: Response) {
 export function getEmployeeById(req: Request, res: Response) {
   const id = Number(req.params.id);
   const employee = employeeService.getEmployeeById(id);
-  if (!employee) return res.status(404).json({ error: "Employee not found" });
+  if (!employee) return res. status(404).json({ error: "Employee not found" });
   res.json(employee);
 }
 

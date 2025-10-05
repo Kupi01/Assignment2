@@ -1,4 +1,4 @@
-import { Branch } from "src/models/branch";
+import { Branch } from "../models/branch";
 
 export const branches: Branch[] = [
   {
