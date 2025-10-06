@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import * as branchService from "../services/branchService";
 import { ApiResponse } from "../../../models/response";
 
-export function getAllBranches(_req: Request, res: Response) {
-  const branches = branchService.getAllBranches();
+export async function getAllBranches(_req: Request, res: Response) {
+  const branches = await branchService.getAllBranches();
   const response: ApiResponse<typeof branches> = {
     success: true,
     data: branches,
@@ -11,9 +11,9 @@ export function getAllBranches(_req: Request, res: Response) {
   res.json(response);
 }
 
-export function getBranchById(req: Request, res: Response) {
-  const id = Number(req.params.id);
-  const branch = branchService.getBranchById(id);
+export async function getBranchById(req: Request, res: Response) {
+  const id = req.params.id;
+  const branch = await branchService.getBranchById(id);
   if (!branch) {
     const response: ApiResponse<null> = {
       success: false,
@@ -28,7 +28,7 @@ export function getBranchById(req: Request, res: Response) {
   res.json(response);
 }
 
-export function createBranch(req: Request, res: Response) {
+export async function createBranch(req: Request, res: Response) {
   const { name, address, phone } = req.body;
   if (!name || !address || !phone) {
     const response: ApiResponse<null> = {
@@ -37,7 +37,7 @@ export function createBranch(req: Request, res: Response) {
     };
     return res.status(400).json(response);
   }
-  const newBranch = branchService.createBranch({ name, address, phone });
+  const newBranch = await branchService.createBranch({ name, address, phone });
   const response: ApiResponse<typeof newBranch> = {
     success: true,
     data: newBranch,
@@ -45,10 +45,10 @@ export function createBranch(req: Request, res: Response) {
   res.status(201).json(response);
 }
 
-export function updateBranch(req: Request, res: Response) {
-  const id = Number(req.params.id);
+export async function updateBranch(req: Request, res: Response) {
+  const id = req.params.id;
   const updates = req.body;
-  const updated = branchService.updateBranch(id, updates);
+  const updated = await branchService.updateBranch(id, updates);
   if (!updated) {
     const response: ApiResponse<null> = {
       success: false,
@@ -63,9 +63,9 @@ export function updateBranch(req: Request, res: Response) {
   res.json(response);
 }
 
-export function deleteBranch(req: Request, res: Response) {
-  const id = Number(req.params.id);
-  const deleted = branchService.deleteBranch(id);
+export async function deleteBranch(req: Request, res: Response) {
+  const id = req.params.id;
+  const deleted = await branchService.deleteBranch(id);
   if (!deleted) {
     const response: ApiResponse<null> = {
       success: false,

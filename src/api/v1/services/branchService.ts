@@ -1,32 +1,28 @@
-import { branches } from "../../../data/branch";
+import { createDocument, getDocuments, getDocumentById, updateDocument, deleteDocument } from "../repositories/firestoreRepository";
 import { Branch } from "../../../models/branch";
 
-let nextId = branches.length ? Math.max(...branches.map(b => b.id)) + 1 : 1;
+const COLLECTION = "branches";
 
-export function getAllBranches(): Branch[] {
-  return branches;
+export async function getAllBranches() {
+  const snapshot = await getDocuments(COLLECTION);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Branch));
 }
 
-export function getBranchById(id: number): Branch | undefined {
-  return branches.find(b => b.id === id);
+export async function getBranchById(id: string) {
+  const doc = await getDocumentById(COLLECTION, id);
+  return doc ? ({ id: doc.id, ...doc.data() } as Branch) : null;
 }
 
-export function createBranch(data: Omit<Branch, "id">): Branch {
-  const newBranch: Branch = { id: nextId++, ...data };
-  branches.push(newBranch);
-  return newBranch;
+export async function createBranch(data: Partial<Branch>) {
+  return await createDocument(COLLECTION, data);
 }
 
-export function updateBranch(id: number, updates: Partial<Omit<Branch, "id">>): Branch | undefined {
-  const branch = branches.find(b => b.id === id);
-  if (!branch) return undefined;
-  Object.assign(branch, updates);
-  return branch;
+export async function updateBranch(id: string, data: Partial<Branch>) {
+  await updateDocument(COLLECTION, id, data);
+  return getBranchById(id);
 }
 
-export function deleteBranch(id: number): boolean {
-  const index = branches.findIndex(b => b.id === id);
-  if (index === -1) return false;
-  branches.splice(index, 1);
+export async function deleteBranch(id: string) {
+  await deleteDocument(COLLECTION, id);
   return true;
 }
