@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
 import { ApiResponse } from "../../../models/response";
 
-export function getAllEmployees(_req: Request, res: Response) {
-  const employees = employeeService.getAllEmployees();
+export async function getAllEmployees(_req: Request, res: Response) {
+  const employees = await employeeService.getAllEmployees();
   const response: ApiResponse<typeof employees> = {
     success: true,
     data: employees,
@@ -11,9 +11,9 @@ export function getAllEmployees(_req: Request, res: Response) {
   res.json(response);
 }
 
-export function getEmployeeById(req: Request, res: Response) {
-  const id = Number(req.params.id);
-  const employee = employeeService.getEmployeeById(id);
+export async function getEmployeeById(req: Request, res: Response) {
+  const id = req.params.id;
+  const employee = await employeeService.getEmployeeById(id);
   if (!employee) {
     const response: ApiResponse<null> = {
       success: false,
@@ -28,7 +28,7 @@ export function getEmployeeById(req: Request, res: Response) {
   res.json(response);
 }
 
-export function createEmployee(req: Request, res: Response) {
+export async function createEmployee(req: Request, res: Response) {
   const { name, position, department, email, phone, branchId } = req.body;
   if (!name || !position || !department || !email || !phone || !branchId) {
     const response: ApiResponse<null> = {
@@ -37,7 +37,7 @@ export function createEmployee(req: Request, res: Response) {
     };
     return res.status(400).json(response);
   }
-  const newEmployee = employeeService.createEmployee({ name, position, department, email, phone, branchId });
+  const newEmployee = await employeeService.createEmployee({ name, position, department, email, phone, branchId });
   const response: ApiResponse<typeof newEmployee> = {
     success: true,
     data: newEmployee,
@@ -45,10 +45,10 @@ export function createEmployee(req: Request, res: Response) {
   res.status(201).json(response);
 }
 
-export function updateEmployee(req: Request, res: Response) {
-  const id = Number(req.params.id);
+export async function updateEmployee(req: Request, res: Response) {
+  const id = req.params.id;
   const updates = req.body;
-  const updated = employeeService.updateEmployee(id, updates);
+  const updated = await employeeService.updateEmployee(id, updates);
   if (!updated) {
     const response: ApiResponse<null> = {
       success: false,
@@ -63,9 +63,9 @@ export function updateEmployee(req: Request, res: Response) {
   res.json(response);
 }
 
-export function deleteEmployee(req: Request, res: Response) {
-  const id = Number(req.params.id);
-  const deleted = employeeService.deleteEmployee(id);
+export async function deleteEmployee(req: Request, res: Response) {
+  const id = req.params.id;
+  const deleted = await employeeService.deleteEmployee(id);
   if (!deleted) {
     const response: ApiResponse<null> = {
       success: false,
@@ -80,16 +80,16 @@ export function deleteEmployee(req: Request, res: Response) {
   res.json(response);
 }
 
-export function getEmployeesByBranch(req: Request, res: Response) {
-  const branchId = Number(req.params.branchId);
-  if (isNaN(branchId)) {
+export async function getEmployeesByBranch(req: Request, res: Response) {
+  const branchId = req.params.branchId;
+  if (!branchId) {
     const response: ApiResponse<null> = {
       success: false,
       error: "Invalid branch ID",
     };
     return res.status(400).json(response);
   }
-  const employees = employeeService.getEmployeesByBranch(branchId);
+  const employees = await employeeService.getEmployeesByBranch(branchId);
   const response: ApiResponse<typeof employees> = {
     success: true,
     data: employees,
@@ -97,7 +97,7 @@ export function getEmployeesByBranch(req: Request, res: Response) {
   res.json(response);
 }
 
-export function getEmployeesByDepartment(req: Request, res: Response) {
+export async function getEmployeesByDepartment(req: Request, res: Response) {
   const department = req.params.department;
   if (!department) {
     const response: ApiResponse<null> = {
@@ -106,7 +106,7 @@ export function getEmployeesByDepartment(req: Request, res: Response) {
     };
     return res.status(400).json(response);
   }
-  const employees = employeeService.getEmployeesByDepartment(department);
+  const employees = await employeeService.getEmployeesByDepartment(department);
   const response: ApiResponse<typeof employees> = {
     success: true,
     data: employees,

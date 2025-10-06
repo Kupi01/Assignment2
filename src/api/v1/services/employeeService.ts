@@ -1,40 +1,34 @@
-import { employees } from "../../../data/employee";
-import { Employee } from "../../../models/employee";
+import { FirestoreRepository } from "../repositories/firestoreRepository";
+import { Employee } from "../../models/employee";
 
-let nextId = employees.length ? Math.max(...employees.map(e => e.id)) + 1 : 1;
+const employeeRepo = new FirestoreRepository<Employee>("employees");
 
-export function getAllEmployees(): Employee[] {
-  return employees;
+export async function getAllEmployees() {
+  return await employeeRepo.getAll();
 }
 
-export function getEmployeeById(id: number): Employee | undefined {
-  return employees.find(e => e.id === id);
+export async function getEmployeeById(id: string) {
+  return await employeeRepo.getById(id);
 }
 
-export function createEmployee(data: Omit<Employee, "id">): Employee {
-  const newEmployee: Employee = { id: nextId++, ...data };
-  employees.push(newEmployee);
-  return newEmployee;
+export async function createEmployee(data: Employee) {
+  return await employeeRepo.create(data);
 }
 
-export function updateEmployee(id: number, updates: Partial<Omit<Employee, "id">>): Employee | undefined {
-  const employee = employees.find(e => e.id === id);
-  if (!employee) return undefined;
-  Object.assign(employee, updates);
-  return employee;
+export async function updateEmployee(id: string, data: Partial<Employee>) {
+  return await employeeRepo.update(id, data);
 }
 
-export function deleteEmployee(id: number): boolean {
-  const index = employees.findIndex(e => e.id === id);
-  if (index === -1) return false;
-  employees.splice(index, 1);
-  return true;
+export async function deleteEmployee(id: string) {
+  return await employeeRepo.delete(id);
 }
 
-export function getEmployeesByBranch(branchId: number) {
-  return employees.filter(e => e.branchId === branchId);
+export async function getEmployeesByBranch(branchId: string) {
+  const all = await employeeRepo.getAll();
+  return all.filter(e => e.branchId === branchId);
 }
 
-export function getEmployeesByDepartment(department: string) {
-  return employees.filter(e => e.department.toLowerCase() === department.toLowerCase());
+export async function getEmployeesByDepartment(department: string) {
+  const all = await employeeRepo.getAll();
+  return all.filter(e => e.department.toLowerCase() === department.toLowerCase());
 }
