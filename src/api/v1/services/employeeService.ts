@@ -1,34 +1,38 @@
-import { FirestoreRepository } from "../repositories/firestoreRepository";
-import { Employee } from "../../models/employee";
+import { createDocument, getDocuments, getDocumentById, updateDocument, deleteDocument } from "../repositories/firestoreRepository";
+import { Employee } from "../../../models/employee";
 
-const employeeRepo = new FirestoreRepository<Employee>("employees");
+const COLLECTION = "employees";
 
 export async function getAllEmployees() {
-  return await employeeRepo.getAll();
+  const snapshot = await getDocuments(COLLECTION);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Employee));
 }
 
 export async function getEmployeeById(id: string) {
-  return await employeeRepo.getById(id);
+  const doc = await getDocumentById(COLLECTION, id);
+  return doc ? ({ id: doc.id, ...doc.data() } as Employee) : null;
 }
 
-export async function createEmployee(data: Employee) {
-  return await employeeRepo.create(data);
+export async function createEmployee(data: Partial<Employee>) {
+  return await createDocument(COLLECTION, data);
 }
 
 export async function updateEmployee(id: string, data: Partial<Employee>) {
-  return await employeeRepo.update(id, data);
+  await updateDocument(COLLECTION, id, data);
+  return getEmployeeById(id);
 }
 
 export async function deleteEmployee(id: string) {
-  return await employeeRepo.delete(id);
+  await deleteDocument(COLLECTION, id);
+  return true;
 }
 
 export async function getEmployeesByBranch(branchId: string) {
-  const all = await employeeRepo.getAll();
+  const all = await getAllEmployees();
   return all.filter(e => e.branchId === branchId);
 }
 
 export async function getEmployeesByDepartment(department: string) {
-  const all = await employeeRepo.getAll();
+  const all = await getAllEmployees();
   return all.filter(e => e.department.toLowerCase() === department.toLowerCase());
 }
