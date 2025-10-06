@@ -1,3 +1,8 @@
+// Jest mock exports for tests
+// These will be overridden by jest.mock in test setup
+export const firestore = jest ? jest.fn() : undefined;
+export const auth = jest ? jest.fn() : undefined;
+export const app = jest ? jest.fn() : undefined;
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getFirestore, Firestore } from "firebase-admin/firestore";
 
