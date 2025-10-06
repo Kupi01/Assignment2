@@ -1,10 +1,7 @@
 import { db } from "../../../config/firebaseConfig";
 import {
   DocumentSnapshot,
-  QuerySnapshot,
-  Transaction,
-  WriteBatch,
-  Query,
+  QuerySnapshot
 } from "firebase-admin/firestore";
 
 // Example: createDocument
